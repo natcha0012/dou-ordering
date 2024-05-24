@@ -1,0 +1,194 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             Int     @id @default(autoincrement())
+  username       String  @unique()
+  role           String
+  password       String
+  salt           String
+  tokenVersion   BigInt  @default(0) @map("token_version")
+  telNo          String? @map("tel_no")
+  branchMasterId Int?    @map("branch_master_id")
+  branchId       Int?    @map("branch_id")
+
+  BranchMaster BranchMaster? @relation(fields: [branchMasterId], references: [id])
+  Branch       Branch?       @relation(fields: [branchId], references: [id])
+  D_Order      Order[]       @relation("deliver")
+  P_Order      Order[]       @relation("packing")
+
+  @@index([role])
+  @@map("user")
+}
+
+model BranchMaster {
+  id               Int                @id @default(autoincrement())
+  name             String             @unique()
+  User             User[]
+  MapBranchProduct MapBranchProduct[]
+  Branch           Branch[]
+  Order            Order[]
+  Stock            Stock[]
+  LimitProduct     LimitProduct[]
+  BranchStock      BranchStock[]
+
+  @@map("branch_master")
+}
+
+model Branch {
+  id             Int    @id @default(autoincrement())
+  name           String @unique()
+  branchMasterId Int    @map("branch_master_id")
+
+  BranchMaster BranchMaster @relation(fields: [branchMasterId], references: [id])
+
+  User             User[]
+  MapBranchProduct MapBranchProduct[]
+  Order            Order[]
+  LimitProduct     LimitProduct[]
+  BranchStock      BranchStock[]
+
+  @@index([branchMasterId])
+  @@map("branch")
+}
+
+model Product {
+  id            Int     @id @default(autoincrement())
+  name          String  @unique()
+  price         Decimal @db.Decimal(20, 2)
+  productTypeId Int
+
+  productType      ProductType        @relation(fields: [productTypeId], references: [id])
+  MapBranchProduct MapBranchProduct[]
+  Stock            Stock[]
+  LimitProduct     LimitProduct[]
+  BranchStock      BranchStock[]
+
+  //not sure yet
+  //@@index([]) 
+  @@map("product")
+}
+
+model ProductType {
+  id          Int           @id @default(autoincrement())
+  name        String        @unique()
+  Product     Product[]
+  Stock       Stock[]
+  BranchStock BranchStock[]
+
+  @@map("product_type")
+}
+
+model MapBranchProduct {
+  id             BigInt @id @default(autoincrement())
+  date           String @default("")
+  amount         Int
+  allTimeAmount  BigInt @default(0) @map("all_time_amount")
+  productId      Int    @map("product_id")
+  //ใส่ productname มาเพื่อให้ query เร็วขึ้น
+  //แต่ยังจำเป็น ต้องมี productId ป้องกันไม่ให้ใส่ product name มั่วๆ
+  productName    String @map("product_name")
+  branchMasterId Int    @map("branch_master_id")
+  branchId       Int    @map("branch_id")
+
+  Product      Product       @relation(fields: [productId], references: [id])
+  BranchMaster BranchMaster? @relation(fields: [branchMasterId], references: [id])
+  Branch       Branch        @relation(fields: [branchId], references: [id])
+
+  @@unique([branchMasterId, branchId, productId, date(sort: Desc)])
+  @@map("map_branch_product")
+}
+
+model LimitProduct {
+  id             Int    @id @default(autoincrement())
+  limit          Int?
+  productId      Int    @map("product_id")
+  productName    String @map("product_name")
+  productTypeId  Int    @map("product_type_id")
+  branchMasterId Int    @map("branch_master_id")
+  branchId       Int?   @map("branch_id")
+
+  Product      Product      @relation(fields: [productId], references: [id])
+  BranchMaster BranchMaster @relation(fields: [branchMasterId], references: [id])
+  Branch       Branch?      @relation(fields: [branchId], references: [id])
+
+  @@unique([branchMasterId, productId, branchId])
+  @@map("limit_product")
+}
+
+model Order {
+  id              BigInt  @id @default(autoincrement())
+  branchId        Int     @map("branch_id")
+  branchName      String  @default("branch1") @map("branch_name")
+  branchMasterId  Int     @map("branch_master_id")
+  orderDetail     Json[]  @map("order_detail")
+  spoiledProducts Json[]  @map("spoiled_product")
+  status          String
+  balance         Decimal @db.Decimal(20, 2)
+  createdAt       BigInt  @default(0) @map("created_at")
+  updatedAt       BigInt  @default(0) @map("updated_at")
+  remark          String?
+  deliverId       Int?    @map("deliver_id")
+  packingId       Int?    @map("packing_id")
+  queueStatus     String? @map("queue_status") @db.VarChar(20)
+
+  Branch       Branch       @relation(fields: [branchId], references: [id])
+  BranchMaster BranchMaster @relation(fields: [branchMasterId], references: [id])
+  Deliver      User?        @relation(fields: [deliverId], references: [id], "deliver")
+  Packing      User?        @relation(fields: [packingId], references: [id], "packing")
+
+  @@index([branchMasterId, branchId, status])
+  @@index([branchId, status])
+  @@map("order")
+}
+
+model BranchStock {
+  id             Int    @id @default(autoincrement())
+  branchId       Int    @map("branch_id")
+  branchMasterId Int    @map("branch_master_id")
+  productId      Int    @map("product_id")
+  productName    String @map("product_name")
+  productTypeId  Int    @map("product_type_id")
+  amount         Int
+
+  Branch        Branch       @relation(fields: [branchId], references: [id])
+  BranchMaster  BranchMaster @relation(fields: [branchMasterId], references: [id])
+  Product       Product      @relation(fields: [productId], references: [id])
+  ProductTypeId ProductType  @relation(fields: [productTypeId], references: [id])
+
+  @@unique([branchId, productId])
+  @@map("branch_stock")
+}
+
+// update บ่อยมาก
+model Stock {
+  id             BigInt @id @default(autoincrement())
+  date           String
+  totalIn        Int    @map("today_in")
+  totalOut       Int    @map("today_out")
+  spoiledAmount  Int    @default(0) @map("spoil_amount")
+  readyToPack    Int    @map("ready_to_pack")
+  stockBalance   Int    @map("stock_balance")
+  productId      Int    @map("product_id")
+  productTypeId  Int    @map("product_type_id")
+  //ใส่ productname มาเพื่อให้ query เร็วขึ้น
+  //แต่ยังจำเป็น ต้องมี productId ป้องกันไม่ให้ใส่ product name มั่วๆ
+  productName    String @map("product_name")
+  branchMasterId Int    @map("branch_master_id")
+
+  Product      Product      @relation(fields: [productId], references: [id])
+  ProductType  ProductType  @relation(fields: [productTypeId], references: [id])
+  BranchMaster BranchMaster @relation(fields: [branchMasterId], references: [id])
+
+  @@unique([branchMasterId, date(sort: Desc), productId])
+  @@map("stock")
+}

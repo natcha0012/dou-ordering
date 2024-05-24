@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: dou-back-service
+  name: dou-back-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dou-back-service
+  template:
+    metadata:
+      labels:
+        app: dou-back-service
+    spec:
+      containers:
+        - image: 408420567631.dkr.ecr.ap-southeast-1.amazonaws.com/dou-back-service:latest
+          name: dou-back-service
+          environment:
+            - DATABASE_URL=postgresql://postgres:password@postgres:5432/dou-db
+            - AUTH_SECRET=auth_secret
+            - PORT=3000
+            - REDIS_HOST=redis
+            - REDIS_PORT=6379
+          ports:
+            - containerPort: 3000
