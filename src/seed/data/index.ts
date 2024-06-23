@@ -1,16 +1,5 @@
 import { Prisma } from '@prisma/client';
 
-const ThaiDate = () => {
-  // return '2024/02/28';
-  const timest = Date.now() + 7 * 60 * 60 * 1000;
-  const yyyy = new Date(timest).getUTCFullYear();
-  const mm = new Date(timest).getUTCMonth() + 1;
-  const dd = new Date(timest).getUTCDate();
-  return `${yyyy}-${mm.toString().padStart(2, '0')}-${dd
-    .toString()
-    .padStart(2, '0')}`;
-};
-
 export const users: Prisma.UserCreateManyArgs = {
   data: [
     {
@@ -96,42 +85,42 @@ export const branch: Prisma.BranchCreateManyArgs = {
 
 export const product: Prisma.ProductCreateManyArgs = {
   data: [
-    { name: 'น้ำเต้าหู้', price: 10, productTypeId: 1 },
-    { name: 'น้ำขิง', price: 20, productTypeId: 1 },
-    { name: 'นมสด', price: 30, productTypeId: 1 },
-    { name: 'ซุปงาดำ', price: 25, productTypeId: 1 },
-    { name: 'น้ำลำไย', price: 35, productTypeId: 1 },
-    { name: 'น้ำเชื่อมใบเตย', price: 35, productTypeId: 1 },
-    { name: 'น้ำเต้าหู้เย็น (ไม่ผสม)', price: 35, productTypeId: 1 },
-    { name: 'น้ำขิงน้ำผึ้ง เย็น', price: 35, productTypeId: 1 },
-    { name: 'ข้าวบาร์เลย์', price: 35, productTypeId: 2 },
-    { name: 'ลูกเดือย', price: 35, productTypeId: 2 },
-    { name: 'ถั่วแดง', price: 35, productTypeId: 2 },
-    { name: 'ถั่วดำ', price: 35, productTypeId: 2 },
-    { name: 'ถั่วขาว', price: 35, productTypeId: 2 },
-    { name: 'ถั่วเขียว', price: 35, productTypeId: 2 },
-    { name: 'ถั่วเหลือง', price: 35, productTypeId: 2 },
-    { name: 'แปะก๊วย', price: 35, productTypeId: 3 },
-    { name: 'เม็ดบัว', price: 35, productTypeId: 3 },
-    { name: 'พุทรา', price: 35, productTypeId: 3 },
-    { name: 'รากบัว', price: 35, productTypeId: 3 },
-    { name: 'มะตูม', price: 35, productTypeId: 3 },
-    { name: 'ฟักเชื่อม', price: 35, productTypeId: 3 },
-    { name: 'วุ้น', price: 45, productTypeId: 4 },
-    { name: 'สาคู', price: 45, productTypeId: 4 },
-    { name: 'สังขยา', price: 45, productTypeId: 4 },
-    { name: 'เฉาก๊วย', price: 45, productTypeId: 4 },
-    { name: 'เต้าฮวย', price: 45, productTypeId: 4 },
-    { name: 'ปาท่องโก๋ เกลียว (500 กรัม/ถุง)', price: 55, productTypeId: 5 },
-    { name: 'ปาท่องโก๋ แท่ง (500 กรัม/ถุง)', price: 55, productTypeId: 5 },
-    { name: 'ขนมปัง (10 ชิ้น/ถุง)', price: 55, productTypeId: 5 },
-    { name: 'บัวลอยไส้งาดำ', price: 55, productTypeId: 5 },
-    { name: 'ฟองเต้าหู้ (500 กรัม/ถุง)', price: 55, productTypeId: 5 },
-    { name: 'แมงลัก', price: 65, productTypeId: 6 },
-    { name: 'ปาท่องโก๋กรอบ', price: 65, productTypeId: 6 },
-    { name: 'งาดำป่น (500 กรัม/ถุง)', price: 65, productTypeId: 6 },
-    { name: 'น้ำอ้อยธรรมชาติ (มิตรผล)', price: 75, productTypeId: 7 },
-    { name: 'น้ำตาลทรายแดง (ข้าวทอง)', price: 75, productTypeId: 7 },
+    { name: 'น้ำเต้าหู้', productTypeId: 1 },
+    { name: 'น้ำขิง', productTypeId: 1 },
+    { name: 'นมสด', productTypeId: 1 },
+    { name: 'ซุปงาดำ', productTypeId: 1 },
+    { name: 'น้ำลำไย', productTypeId: 1 },
+    { name: 'น้ำเชื่อมใบเตย', productTypeId: 1 },
+    { name: 'น้ำเต้าหู้เย็น (ไม่ผสม)', productTypeId: 1 },
+    { name: 'น้ำขิงน้ำผึ้ง เย็น', productTypeId: 1 },
+    { name: 'ข้าวบาร์เลย์', productTypeId: 2 },
+    { name: 'ลูกเดือย', productTypeId: 2 },
+    { name: 'ถั่วแดง', productTypeId: 2 },
+    { name: 'ถั่วดำ', productTypeId: 2 },
+    { name: 'ถั่วขาว', productTypeId: 2 },
+    { name: 'ถั่วเขียว', productTypeId: 2 },
+    { name: 'ถั่วเหลือง', productTypeId: 2 },
+    { name: 'แปะก๊วย', productTypeId: 3 },
+    { name: 'เม็ดบัว', productTypeId: 3 },
+    { name: 'พุทรา', productTypeId: 3 },
+    { name: 'รากบัว', productTypeId: 3 },
+    { name: 'มะตูม', productTypeId: 3 },
+    { name: 'ฟักเชื่อม', productTypeId: 3 },
+    { name: 'วุ้น', productTypeId: 4 },
+    { name: 'สาคู', productTypeId: 4 },
+    { name: 'สังขยา', productTypeId: 4 },
+    { name: 'เฉาก๊วย', productTypeId: 4 },
+    { name: 'เต้าฮวย', productTypeId: 4 },
+    { name: 'ปาท่องโก๋ เกลียว (500 กรัม/ถุง)', productTypeId: 5 },
+    { name: 'ปาท่องโก๋ แท่ง (500 กรัม/ถุง)', productTypeId: 5 },
+    { name: 'ขนมปัง (10 ชิ้น/ถุง)', productTypeId: 5 },
+    { name: 'บัวลอยไส้งาดำ', productTypeId: 5 },
+    { name: 'ฟองเต้าหู้ (500 กรัม/ถุง)', productTypeId: 5 },
+    { name: 'แมงลัก', productTypeId: 6 },
+    { name: 'ปาท่องโก๋กรอบ', productTypeId: 6 },
+    { name: 'งาดำป่น (500 กรัม/ถุง)', productTypeId: 6 },
+    { name: 'น้ำอ้อยธรรมชาติ (มิตรผล)', productTypeId: 7 },
+    { name: 'น้ำตาลทรายแดง (ข้าวทอง)', productTypeId: 7 },
   ],
   skipDuplicates: true,
 };
@@ -146,112 +135,5 @@ export const productType: Prisma.ProductTypeCreateManyArgs = {
     { name: 'อื่นๆ' },
     { name: 'น้ำตาล' },
   ],
-  skipDuplicates: true,
-};
-
-export const stocks: Prisma.StockCreateManyArgs = {
-  data: (product.data as any[]).map((p, i) => {
-    return {
-      date: ThaiDate(),
-      branchMasterId: 1,
-      productId: i + 1,
-      productName: p.name,
-      productTypeId: p.productTypeId,
-      totalIn: 0,
-      readyToPack: 0,
-      totalOut: 0,
-      stockBalance: 0,
-    };
-  }),
-  skipDuplicates: true,
-};
-
-const branchStockData: Prisma.BranchStockCreateManyInput[] = [];
-for (let branchId = 1; branchId <= 3; branchId++) {
-  (product.data as any[]).forEach((p, i) => {
-    branchStockData.push({
-      branchMasterId: 1,
-      branchId,
-      productId: i + 1,
-      productName: p.name,
-      productTypeId: p.productTypeId,
-      amount: 0,
-    });
-  });
-}
-
-export const branchStock: Prisma.BranchStockCreateManyArgs = {
-  data: branchStockData,
-  skipDuplicates: true,
-};
-
-const limitProductData = () => {
-  const res = [];
-
-  for (const i in product.data as any[]) {
-    const p = (product.data as any[])[i];
-    for (let branchId = 1; branchId <= 3; branchId++) {
-      res.push({
-        branchId: branchId,
-        branchMasterId: 1,
-        productId: Number(i) + 1,
-        productName: p.name,
-        productTypeId: p.productTypeId,
-        limit: null,
-      });
-    }
-  }
-  return res;
-};
-
-const mapBranchProductData = () => {
-  const res = [];
-
-  for (const i in product.data as any[]) {
-    const p = (product.data as any[])[i];
-    for (let branchId = 1; branchId <= 3; branchId++) {
-      res.push({
-        amount: 0,
-        allTimeAmount: 0,
-        branchId: branchId,
-        branchMasterId: 1,
-        productId: Number(i) + 1,
-        productName: p.name,
-        date: '2023-01-01',
-      });
-    }
-  }
-  return res;
-};
-
-const defaultLimitProductData = () => {
-  const res = [];
-
-  for (const i in product.data as any[]) {
-    const p = (product.data as any[])[i];
-    res.push({
-      branchId: null,
-      branchMasterId: 1,
-      productId: Number(i) + 1,
-      productName: p.name,
-      productTypeId: p.productTypeId,
-      limit: null,
-    });
-  }
-  return res;
-};
-
-export const limitProduct: Prisma.LimitProductCreateManyArgs = {
-  data: limitProductData(),
-  skipDuplicates: true,
-};
-
-export const defaultLimitProduct: Prisma.LimitProductCreateManyArgs = {
-  data: defaultLimitProductData(),
-  skipDuplicates: true,
-};
-
-export const mapBranchProduct: Prisma.MapBranchProductCreateManyArgs = {
-  data: mapBranchProductData(),
   skipDuplicates: true,
 };

@@ -2,11 +2,7 @@ import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { Auth } from 'src/decorator/auth.decorator';
 import { UserRole } from 'src/enum/user.enum';
-import {
-  AddToCartReq,
-  ProductProblem,
-  RemoveFromCartReq,
-} from './dto/request.dto';
+import { AddToCartReq, RemoveFromCartReq } from './dto/request.dto';
 import { UserData } from 'src/decorator/user.decorator';
 import { UserTokenPayload } from 'src/types/token.type';
 
@@ -53,8 +49,12 @@ export class OrderController {
 
   @Post('packed/:id')
   @Auth(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.PACKING)
-  confirmPacked(@Param('id') id: string, @UserData() user: UserTokenPayload) {
-    return this.orderService.confirmPacked(+id, user);
+  confirmPacked(
+    @Param('id') id: string,
+    @Body() input: AddToCartReq,
+    @UserData() user: UserTokenPayload,
+  ) {
+    return this.orderService.confirmPacked(+id, input.orders, user);
   }
 
   @Post('delivering/:id')
@@ -69,48 +69,67 @@ export class OrderController {
     return this.orderService.delivered(+id);
   }
 
-  @Post('problems/:id')
-  @Auth(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.STAFF, UserRole.DELIVER)
-  setProblems(
-    @Param('id') id: string,
-    @Body() input: ProductProblem,
-    @UserData() user: UserTokenPayload,
-  ) {
-    return this.orderService.setProblem(+id, input, user);
-  }
+  // @Post('problems/:id')
+  // @Auth(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.STAFF, UserRole.DELIVER)
+  // setProblems(
+  //   @Param('id') id: string,
+  //   @Body() input: ProductProblem,
+  //   @UserData() user: UserTokenPayload,
+  // ) {
+  //   return this.orderService.setProblem(+id, input, user);
+  // }
 
-  @Post('approve-problems/:id')
-  @Auth(UserRole.ADMIN, UserRole.SUPER_ADMIN)
-  approveProblems(@Param('id') id: string, @UserData() user: UserTokenPayload) {
-    return this.orderService.approveProblem(+id, user);
-  }
+  // @Post('approve-problems/:id')
+  // @Auth(UserRole.ADMIN, UserRole.SUPER_ADMIN)
+  // approveProblems(@Param('id') id: string, @UserData() user: UserTokenPayload) {
+  //   return this.orderService.approveProblem(+id, user);
+  // }
 
   @Post('confirm-order/:id')
   @Auth(UserRole.STAFF, UserRole.SUPER_ADMIN)
-  confirmOrder(@Param('id') id: string, @UserData() user: UserTokenPayload) {
-    return this.orderService.confirmOrder(+id, user);
-  }
-
-  @Post('pay-bill/:id')
-  @Auth(UserRole.STAFF, UserRole.SUPER_ADMIN)
-  payBill(@Param('id') id: string, @UserData() user: UserTokenPayload) {
-    return this.orderService.payBill(+id, user);
-  }
-
-  @Post('approve-payment/:id')
-  @Auth(UserRole.ADMIN, UserRole.SUPER_ADMIN)
-  approvePayment(@Param('id') id: string, @UserData() user: UserTokenPayload) {
-    return this.orderService.approvePayment(+id, user);
-  }
-
-  @Post('claim/:id')
-  @Auth(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.STAFF)
-  claimProducts(
+  confirmOrder(
     @Param('id') id: string,
-    @Body() input: ProductProblem,
+    @Body() input: AddToCartReq,
     @UserData() user: UserTokenPayload,
   ) {
-    return this.orderService.claimProducts(+id, input, user);
+    return this.orderService.confirmOrder(+id, input.orders, user);
+  }
+
+  // @Post('pay-bill/:id')
+  // @Auth(UserRole.STAFF, UserRole.SUPER_ADMIN)
+  // payBill(@Param('id') id: string, @UserData() user: UserTokenPayload) {
+  //   return this.orderService.payBill(+id, user);
+  // }
+
+  // @Post('approve-payment/:id')
+  // @Auth(UserRole.ADMIN, UserRole.SUPER_ADMIN)
+  // approvePayment(@Param('id') id: string, @UserData() user: UserTokenPayload) {
+  //   return this.orderService.approvePayment(+id, user);
+  // }
+
+  // @Post('claim/:id')
+  // @Auth(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.STAFF)
+  // claimProducts(
+  //   @Param('id') id: string,
+  //   @Body() input: ProductProblem,
+  //   @UserData() user: UserTokenPayload,
+  // ) {
+  //   return this.orderService.claimProducts(+id, input, user);
+  // }
+
+  @Get('in-cart')
+  @Auth(UserRole.STAFF)
+  getOrderIncart(@UserData() user: UserTokenPayload) {
+    return this.orderService.getOrderIncart(user);
+  }
+
+  @Get('in-cart/:id')
+  @Auth(UserRole.STAFF)
+  getOrderIncartById(
+    @Param('id') id: string,
+    @UserData() user: UserTokenPayload,
+  ) {
+    return this.orderService.getOrderIncart(user, Number(id));
   }
 
   @Get('')

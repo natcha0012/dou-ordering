@@ -8,12 +8,7 @@ import {
   Delete,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
-import {
-  CreateProductReq,
-  ListProductLimitReq,
-  SetProductLimitReq,
-  UpdateProductReq,
-} from './dto/request.dto';
+import { CreateProductReq, UpdateProductReq } from './dto/request.dto';
 import { Auth } from 'src/decorator/auth.decorator';
 import { UserRole } from 'src/enum/user.enum';
 import { UserData } from 'src/decorator/user.decorator';
@@ -59,27 +54,5 @@ export class ProductsController {
   @Auth(UserRole.ADMIN, UserRole.SUPER_ADMIN)
   remove(@Param('id') id: string) {
     return this.productsService.remove(+id);
-  }
-
-  @Post('list-limit')
-  @Auth()
-  listProdductLimit(
-    @Body() input: ListProductLimitReq,
-    @UserData() user: UserTokenPayload,
-  ) {
-    return this.productsService.listProductLimit(
-      input.branchMasterId,
-      user,
-      input.branchId,
-    );
-  }
-
-  @Post('set-limit')
-  @Auth(UserRole.SUPER_ADMIN, UserRole.ADMIN)
-  setProdductLimit(
-    @Body() input: SetProductLimitReq,
-    @UserData() user: UserTokenPayload,
-  ) {
-    return this.productsService.setLimitProduct(input, user);
   }
 }

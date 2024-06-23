@@ -12,9 +12,6 @@ export class CreateProductReq {
   name: string;
 
   @IsNumber()
-  price: number;
-
-  @IsNumber()
   productTypeId: number;
 }
 
@@ -22,10 +19,6 @@ export class UpdateProductReq {
   @IsString()
   @IsOptional()
   name?: string;
-
-  @IsOptional()
-  @IsNumber()
-  price?: number;
 }
 
 export class ListProductLimitReq {

@@ -29,45 +29,6 @@ export class BranchsService {
           HttpStatus.INTERNAL_SERVER_ERROR,
         );
       }
-      const limitProduct: Prisma.LimitProductCreateManyInput[] = [];
-      const mapBranchProduct: Prisma.MapBranchProductCreateManyInput[] = [];
-      const branchStock: Prisma.BranchStockCreateManyInput[] = [];
-      products.forEach((p) => {
-        limitProduct.push({
-          branchId: branch.id,
-          branchMasterId: 1,
-          productId: p.id,
-          productName: p.name,
-          productTypeId: p.productTypeId,
-          limit: null,
-        });
-        mapBranchProduct.push({
-          amount: 0,
-          allTimeAmount: 0,
-          branchId: branch.id,
-          branchMasterId: branch.branchMasterId,
-          productId: p.id,
-          productName: p.name,
-          date: '2023-01-01',
-        });
-
-        branchStock.push({
-          amount: 0,
-          branchId: branch.id,
-          branchMasterId: branch.branchMasterId,
-          productId: p.id,
-          productName: p.name,
-          productTypeId: p.productTypeId,
-        });
-      });
-
-      await tx.mapBranchProduct.createMany({
-        data: mapBranchProduct,
-      });
-
-      await tx.limitProduct.createMany({ data: limitProduct });
-      await tx.branchStock.createMany({ data: branchStock });
-
       return branch;
     });
   }

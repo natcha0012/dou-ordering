@@ -21,7 +21,6 @@ export const generateSalt = () =>
   CryptoJS.lib.WordArray.random(128 / 8).toString();
 
 export const ThaiDate = (timestamp?: number) => {
-  // return '2024/02/28';
   const timest = timestamp ?? Date.now() + 7 * 60 * 60 * 1000;
   const yyyy = new Date(timest).getUTCFullYear();
   const mm = new Date(timest).getUTCMonth() + 1;
