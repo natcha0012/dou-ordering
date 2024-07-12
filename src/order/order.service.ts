@@ -41,8 +41,12 @@ export class OrderService {
   }
   async addToCart(user: UserTokenPayload, input: AddToCartReq) {
     const orderDetails = await this.generateOrderDetail(input);
+    const branch = await this.prisma.branch.findUnique({
+      where: { id: user.branchId },
+    });
     const orderBody: Prisma.OrderUncheckedCreateInput = {
       branchId: user.branchId,
+      branchName: branch.name,
       branchMasterId: user.branchMasterId,
       orderDetail: orderDetails as any[],
       status: OrderStatus.IN_CART,

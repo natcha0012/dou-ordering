@@ -78,7 +78,7 @@ model ProductType {
 model Order {
   id             BigInt @id @default(autoincrement())
   branchId       Int    @map("branch_id")
-  branchName     String @default("branch1") @map("branch_name")
+  branchName     String @map("branch_name")
   branchMasterId Int    @map("branch_master_id")
   orderDetail    Json[] @map("order_detail")
   actualProducts Json[] @map("actual_product")
