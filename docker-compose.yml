@@ -28,7 +28,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: dou-db
+      POSTGRES_DB: order-db
 
   # redis:
   #   container_name: redis
